@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "616239426790",
+    "firebase_url": "https://fir-c8bc4-default-rtdb.firebaseio.com",
+    "project_id": "fir-c8bc4",
+    "storage_bucket": "fir-c8bc4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:616239426790:android:8b96b256685f4d7199df27",
+        "android_client_info": {
+          "package_name": "com.roberto.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOL-nfKSUNEHb0sX6nVDWtnMH9IFjbPAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
