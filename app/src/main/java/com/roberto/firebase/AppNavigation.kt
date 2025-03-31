@@ -9,15 +9,14 @@ import com.roberto.firebase.ui.screens.*
 sealed class Routes(val route: String) {
     object Login : Routes("login")
     object Register : Routes("register")
-    object RegisterEdit : Routes("register_edit/{uid}") {
-        fun createRoute(uid: String) = "register_edit/$uid"
-    }
     object Empleados : Routes("empleados")
 }
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
     NavHost(navController, startDestination = Routes.Login.route) {
+
+        // Login
         composable(Routes.Login.route) {
             LoginScreen(
                 onLoginSuccess = {
@@ -28,9 +27,9 @@ fun AppNavigation(navController: NavHostController) {
             )
         }
 
+        // Registro principal
         composable(Routes.Register.route) {
             RegisterScreen(
-                uidEmpleadoEditando = null,
                 onGoToLista = {
                     navController.navigate(Routes.Empleados.route)
                 },
@@ -42,26 +41,11 @@ fun AppNavigation(navController: NavHostController) {
             )
         }
 
-        composable(Routes.RegisterEdit.route) { backStackEntry ->
-            val uid = backStackEntry.arguments?.getString("uid") ?: ""
-            RegisterScreen(
-                uidEmpleadoEditando = uid,
-                onGoToLista = {
-                    navController.navigate(Routes.Empleados.route)
-                },
-                onLogout = {
-                    navController.navigate(Routes.Login.route) {
-                        popUpTo(0)
-                    }
-                }
-            )
-        }
-
+        // Lista de empleados
         composable(Routes.Empleados.route) {
             EmployeesListScreen(
-                onBack = { navController.popBackStack() },
-                onEditEmpleado = { uid ->
-                    navController.navigate(Routes.RegisterEdit.createRoute(uid))
+                onBack = {
+                    navController.popBackStack()
                 }
             )
         }

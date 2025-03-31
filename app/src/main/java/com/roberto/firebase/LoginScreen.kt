@@ -25,8 +25,8 @@ fun LoginScreen(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var loading by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var cargando by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -41,7 +41,7 @@ fun LoginScreen(
 
         Image(
             painter = painterResource(id = R.drawable.user_image),
-            contentDescription = "User Icon",
+            contentDescription = "Ícono usuario",
             modifier = Modifier.size(100.dp),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
         )
@@ -65,7 +65,6 @@ fun LoginScreen(
             label = { Text("Contraseña") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-            isError = password.isNotBlank() && password.length < 6,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -73,48 +72,39 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                errorMessage = null
+                error = null
 
                 if (email.isBlank() || password.isBlank()) {
-                    errorMessage = "Los campos no pueden estar vacíos."
+                    error = "Completa ambos campos para continuar"
                     return@Button
                 }
 
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    errorMessage = "Correo electrónico inválido."
+                    error = "Correo electrónico inválido"
                     return@Button
                 }
 
-                if (password.length < 6) {
-                    errorMessage = "La contraseña debe tener al menos 6 caracteres."
-                    return@Button
-                }
-
-                loading = true
+                cargando = true
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
-                        loading = false
+                        cargando = false
                         if (task.isSuccessful) {
-                            Toast.makeText(context, "Login exitoso", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                             onLoginSuccess()
                         } else {
-                            errorMessage = task.exception?.localizedMessage
+                            error = "Correo o contraseña incorrectos"
                         }
                     }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !loading
+            enabled = !cargando
         ) {
             Text("Entrar")
         }
 
-        if (errorMessage != null) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = errorMessage!!,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium
-            )
+        if (error != null) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(text = error!!, color = MaterialTheme.colorScheme.error)
         }
     }
 }
